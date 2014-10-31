@@ -1,12 +1,7 @@
 module TicTacToe (
   Board,
   BoardSquare,
-  initBoard,
-  convertBoard
+  newBoard,
 ) where
 
 import TicTacToe.Board
-import qualified TicTacToe.Internal as Internal
-
-convertBoard :: Board -> Board
-convertBoard = Internal.convertSquares
