@@ -1,18 +1,28 @@
 module Main where
 
-import ChessBoard
-import ChessBoard.Position
-import ChessBoard.Pieces
-
-import Control.Monad (liftM2)
-import Data.Maybe (fromMaybe,isNothing,isJust)
+import TicTacToe
+import TicTacToe.Board()
+import TicTacToe.Player()
 
 import Test.HUnit
-import Test.QuickCheck
 import Test.Framework (defaultMain, testGroup)
-import Test.Framework.Providers.QuickCheck2 (testProperty)
 import Test.Framework.Providers.HUnit (testCase)
-import Data.Either.Unwrap (fromRight)
 
 main :: IO ()
-main = defaultMain []
+main = defaultMain tests
+
+tests = [
+    testGroup "Board" [
+     testCase "BoardInitShow" test_board_init_show
+    ]
+  ]
+
+test_board_init_show = (show initBoard) @?= expectedStr
+  where
+    expectedStr = unlines [
+      "...",
+      "...",
+      "..."
+      ]
+
+

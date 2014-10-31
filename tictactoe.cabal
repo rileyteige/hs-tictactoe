@@ -7,17 +7,23 @@ author: Riley Teige
 maintainer: riley.teige@gmail.com
 category: Game
 build-type: Simple
-cabal-version: >=1.2
+cabal-version: >=1.8
 
 library
-    build-depends: QuickCheck -any, base -any, loop-while -any, transformers -any
-    buildable: True
-    hs-source-dirs: src
+    exposed-modules:     TicTacToe,
+                         TicTacToe.Player
+    build-depends:       QuickCheck -any, base -any
+    buildable:           True
+    hs-source-dirs:      src
 
 test-suite test-tictactoe
-    build-depends:     QuickCheck -any, base -any
+    build-depends:     QuickCheck == 2.7.6,
+                       base == 4.6.*,
+                       tictactoe,
+                       HUnit == 1.2.5.*,
+                       test-framework == 0.6,
+                       test-framework-hunit == 0.3.*,
+                       either-unwrap == 1.1
     main-is:           main.hs
     type:              exitcode-stdio-1.0
-    buildable:         True
-    cpp-options:       -DMAIN_FUNCTION=testMain
-    hs-source-dirs:    src
+    hs-source-dirs:    tests
