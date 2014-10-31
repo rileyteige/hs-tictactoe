@@ -17,7 +17,7 @@ tests = [
     ]
   ]
 
-test_board_init_show = (show initBoard) @?= expectedStr
+test_board_init_show = (show newBoard) @?= expectedStr
   where
     expectedStr = unlines [
       "...",

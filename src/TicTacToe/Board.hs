@@ -4,6 +4,7 @@ module TicTacToe.Board (
   BoardSquare,
 -- * Board functions
   newBoard,
+  fromList,
   pieceAt,
   insert,
   isValidMove,
@@ -31,6 +32,12 @@ instance Show Board where
 newBoard :: Board
 newBoard = Board $ replicate boardSize $ replicate boardSize Nothing
   where boardSize = 3
+
+-- |Initializes a new board from a list of squares.
+fromList :: [[BoardSquare]] -> Board
+fromList squares
+  | length squares == 3 && all (\r -> length r == 3) squares = Board squares
+  | otherwise = newBoard
 
 hasStandardWin :: Board -> Bool
 hasStandardWin b = hasFullRow b || hasFullColumn b || hasFullDiagonal b
