@@ -6,8 +6,15 @@ module TicTacToe.Board (
   newBoard,
   pieceAt,
   insert,
-  isValidMove
+  isValidMove,
+  hasFullRow,
+  hasFullColumn,
+  hasFullDiagonal,
+  hasStandardWin
 ) where
+
+import Data.List(transpose)
+import Data.Maybe(isNothing)
 
 import TicTacToe.Player
 
@@ -25,6 +32,21 @@ newBoard :: Board
 newBoard = Board $ replicate boardSize $ replicate boardSize Nothing
   where boardSize = 3
 
+hasStandardWin :: Board -> Bool
+hasStandardWin b = hasFullRow b || hasFullColumn b || hasFullDiagonal b
+
+hasFullRow :: Board -> Bool
+hasFullRow (Board b) = any allEqualOccupied b
+
+hasFullColumn :: Board -> Bool
+hasFullColumn (Board b) = any allEqualOccupied $ transpose b
+
+hasFullDiagonal :: Board -> Bool
+hasFullDiagonal b = any allEqualOccupied [leftDiagonal, rightDiagonal]
+  where leftDiagonal  = piecesAt [1,5,9] b
+        rightDiagonal = piecesAt [3,5,7] b
+
+-- |Inserts a player's move into the board.
 insert :: Player -> Int -> Board -> Board
 insert p idx board
   | isValidMove idx board = insert' p idx board
@@ -51,7 +73,13 @@ isValidMove i b = pieceAt i b == Just Nothing
 pieceAt :: Int -> Board -> Maybe BoardSquare
 pieceAt idx board
   | not $ isValidBoardIndex idx = Nothing
-  | otherwise = Just $ concat (boardToList board) !! (idx - 1)
+  | otherwise = Just $ pieceAt' idx board
+
+pieceAt' :: Int -> Board -> BoardSquare
+pieceAt' i b = concat (boardToList b) !! (i - 1)
+
+piecesAt :: [Int] -> Board -> [BoardSquare]
+piecesAt xs b = map (`pieceAt'` b) xs
 
 -- |Converts a board to a list.
 boardToList :: Board -> [[BoardSquare]]
@@ -59,3 +87,8 @@ boardToList (Board b) = b
 
 isValidBoardIndex :: Int -> Bool
 isValidBoardIndex x = x `elem` [1..9]
+
+allEqualOccupied :: [BoardSquare] -> Bool
+allEqualOccupied xs
+  | isNothing (head xs) = False
+  | otherwise = all (head xs ==) xs
