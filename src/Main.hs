@@ -29,15 +29,16 @@ playTurns (GameState board currentPlayer _)
   | isVictory = return $ GameState board nextPlayer Victory
   | isDraw    = return $ GameState board nextPlayer Draw
   | otherwise = do
-      putStrLn "\n"
-      putStrLn $ "CURRENT PLAYER: " ++ show currentPlayer
-      putStrLn "CURRENT BOARD:"
-      print board
+      showCurrentState
       move <- readMove board
       playTurns $ GameState (insert currentPlayer move board) nextPlayer Playing
   where nextPlayer = if currentPlayer == X then O else X
         isVictory  = hasStandardWin board
         isDraw     = hasStandardDraw board
+        showCurrentState = do
+          putStrLn $ "\nCURRENT PLAYER: " ++ show currentPlayer
+          putStrLn "CURRENT BOARD:"
+          print board
 
 readMove :: Board -> IO Int
 readMove board = do
