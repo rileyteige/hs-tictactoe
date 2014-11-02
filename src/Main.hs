@@ -26,14 +26,16 @@ playGame board = do
 
 playTurns :: GameState -> IO GameState
 playTurns (GameState board currentPlayer _)
-  | isVictory board = return $ GameState board nextPlayer Victory
-  | isDraw board = return $ GameState board nextPlayer Draw
+  | isVictory = return $ GameState board nextPlayer Victory
+  | isDraw    = return $ GameState board nextPlayer Draw
   | otherwise = do
       putStrLn "\n\nCURRENT BOARD:"
       print board
       move <- readMove
       playTurns $ GameState (insert currentPlayer move board) nextPlayer Playing
   where nextPlayer = if currentPlayer == X then O else X
+        isVictory  = hasStandardWin board
+        isDraw     = hasStandardDraw board
 
 readMove :: IO Int
 readMove = do
@@ -51,9 +53,3 @@ prompt str = do
   putStr str
   hFlush stdout
   getLine
-
-isVictory :: Board -> Bool
-isVictory = hasStandardWin
-
-isDraw :: Board -> Bool
-isDraw = hasStandardDraw
