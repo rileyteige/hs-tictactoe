@@ -9,11 +9,13 @@ category: Game
 build-type: Simple
 cabal-version: >=1.8
 
-library
+executable tictactoe
+    main-is: Main.hs
     exposed-modules:     TicTacToe,
                          TicTacToe.Board,
                          TicTacToe.Player
-    build-depends:       QuickCheck -any, base -any
+    build-depends:       QuickCheck -any, base -any,
+                         mtl == 2.2.1
     buildable:           True
     hs-source-dirs:      src
 

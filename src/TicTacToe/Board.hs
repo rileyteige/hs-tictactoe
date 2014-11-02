@@ -11,11 +11,12 @@ module TicTacToe.Board (
   hasFullRow,
   hasFullColumn,
   hasFullDiagonal,
-  hasStandardWin
+  hasStandardWin,
+  hasStandardDraw
 ) where
 
 import Data.List(transpose)
-import Data.Maybe(isNothing)
+import Data.Maybe(isNothing, isJust)
 
 import TicTacToe.Player
 
@@ -38,6 +39,9 @@ fromList :: [[BoardSquare]] -> Board
 fromList squares
   | length squares == 3 && all (\r -> length r == 3) squares = Board squares
   | otherwise = newBoard
+
+hasStandardDraw :: Board -> Bool
+hasStandardDraw b = isFull b && not (hasStandardWin b)
 
 hasStandardWin :: Board -> Bool
 hasStandardWin b = hasFullRow b || hasFullColumn b || hasFullDiagonal b
@@ -94,6 +98,12 @@ boardToList (Board b) = b
 
 isValidBoardIndex :: Int -> Bool
 isValidBoardIndex x = x `elem` [1..9]
+
+isFull :: Board -> Bool
+isFull (Board bs) = all allOccupied bs
+
+allOccupied :: [BoardSquare] -> Bool
+allOccupied = all isJust
 
 allEqualOccupied :: [BoardSquare] -> Bool
 allEqualOccupied xs
